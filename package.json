@@ -15,7 +15,7 @@
     "@types/bun": "^1.2.5",
     "@types/react-dom": "^19.0.4",
     "bun-plugin-svelte": "^0.0.5",
-    "daisyui": "^5.0.2"
+    "daisyui": "^5.0.3"
   },
   "name": "bun_dev_testing",
   "module": "index.tsx",
