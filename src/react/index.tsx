@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import {count} from "./store";
+import {count} from "../store";
 function App() {
 	return (
 		<article className="p-1.5">

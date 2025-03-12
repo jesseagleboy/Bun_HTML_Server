@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "dev": "bun **/*.html"
+    "dev": "bun src/**/*.html",
+    "build": "bun build.ts",
+    "preview": "bun run build; bunx serve dist"
   },
   "dependencies": {
     "@preact/signals-react": "^3.0.1",

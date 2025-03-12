@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { count } from "./store.ts";
+	import { count } from "../store.ts";
 	// biome-ignore lint/style/useConst: <explanation>
 	let name = $state("Jesse");
 </script>
