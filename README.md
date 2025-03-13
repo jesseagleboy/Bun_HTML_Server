@@ -2,6 +2,8 @@
 
 A simple demonstration of Bun's HTML server capabilities with React and Svelte components integration.
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/6e653192-72af-4565-ad0a-f7992e88cdde/deploy-status)](https://app.netlify.com/sites/bun-html-server/deploys)
+
 ## 📋 Overview
 
 This project demonstrates Bun's ability to serve HTML files directly as a server using the command `bun index.html`. It explores the integration of both React and Svelte components within this simple server setup, along with state management using Preact's Signals.
@@ -26,10 +28,15 @@ bun install
 ### Running the Server
 
 ```bash
+# Development mode
 bun dev
-```
 
-This command runs a script defined in `package.json` that locates all HTML files in the repository and generates links to them.
+# Build for production
+bun build
+
+# Preview production build
+bun preview
+```
 
 ## 🎯 Project Goals
 
@@ -46,32 +53,98 @@ The main objectives of this project are:
 
 4. **Persistence**: Implement local storage to maintain state between page navigations and browser sessions.
 
-## 📝 Key Findings & Technical Details
+## 📝 Key Features
 
-- It's possible to use a single Preact Signal from the `@preact/signals-react` package as a source of truth between React and Svelte components, despite the React-specific package name.
-- This approach provides an effective way to share state across different component frameworks.
-- While this works well for simpler applications, it may not be ideal for complex data handling scenarios.
-- Note: This implementation doesn't support Svelte 5.0's Runes feature.
+- **Multi-framework Integration**: Seamlessly integrates React and Svelte components in the same application
+- **Shared State**: Uses Preact's Signals for state management across different component frameworks
+- **Modern Styling**: Implements Tailwind CSS with plugins for forms, typography, and DaisyUI components
+- **Optimized Build Process**: Configured for development and production builds
+- **Local Storage Persistence**: Maintains state between page navigations
 
 ## 🧩 Project Structure
 
-All files are currently organized in the root directory of the project:
-
 ```
 Bun_HTML_Server/
-├── index.html          # Main entry point
-├── *.html              # Additional HTML files served by Bun
-├── *.jsx               # React component files
-├── *.svelte            # Svelte component files
-└── package.json        # Project dependencies and scripts
+├── src/                        # Source code directory
+│   ├── react/                  # React components
+│   │   ├── index.tsx           # Main React component
+│   │   └── another.tsx         # Secondary page React component
+│   ├── svelte/                 # Svelte components
+│   │   ├── App.svelte          # Main Svelte component
+│   │   └── svelte.ts           # Svelte mounting code
+│   ├── stylesheet/             # CSS styles
+│   │   └── styles.css          # Main stylesheet with Tailwind imports
+│   ├── store.ts                # Shared state management
+│   ├── index.html              # Main HTML entry point
+│   └── another-page.html       # Secondary page HTML
+├── build.ts                    # Build configuration
+├── bunfig.toml                 # Bun configuration
+├── package.json                # Project dependencies and scripts
+├── tsconfig.json               # TypeScript configuration
+└── README.md                   # Project documentation
 ```
 
-*Note: This is a simple demonstration project with a flat file structure.*
+## 🛠️ Technologies Used
+
+- **[Bun](https://bun.sh/)**: All-in-one JavaScript runtime and toolkit
+- **[React 19](https://react.dev/)**: Library for building user interfaces
+- **[Svelte 5](https://svelte.dev/)**: Component framework with a new reactive primitive ($state)
+- **[Preact Signals](https://preactjs.com/guide/v10/signals)**: Fine-grained reactivity system
+- **[Tailwind CSS](https://tailwindcss.com/)**: Utility-first CSS framework
+- **[DaisyUI](https://daisyui.com/)**: Component library for Tailwind CSS
+- **[TypeScript](https://www.typescriptlang.org/)**: Typed JavaScript
+
+## 🔍 Implementation Details
+
+### State Management
+
+The application uses Preact's Signals from the `@preact/signals-react` package to maintain state between React and Svelte components:
+
+```typescript
+// src/store.ts
+import {signal} from "@preact/signals-react";
+
+export const count = signal(Number(localStorage.getItem("count") || 0));
+```
+
+### Local Storage Persistence
+
+The counter value is persisted in localStorage, allowing the state to be maintained between page navigations and browser refreshes:
+
+```typescript
+// Example from React component
+onClick={() => {
+  localStorage.setItem("count", `${count.value + 1}`);
+  count.value = Number(localStorage.getItem("count") || 0);
+}}
+```
+
+### Build Configuration
+
+The project is configured for development and production builds using Bun's build API with plugins for Tailwind and Svelte:
+
+```typescript
+// build.ts
+import bunPluginTailwind from "bun-plugin-tailwind"
+import bunPluginSvelte from "bun-plugin-svelte"
+
+Bun.build({
+  entrypoints: ["src/index.html", "src/another-page.html"],
+  outdir: "./dist",
+  minify: true,
+  splitting: true,
+  sourcemap: "linked",
+  // ...other options
+  plugins: [bunPluginTailwind, bunPluginSvelte],
+});
+```
 
 ## 📚 Learn More
 
 - [Bun Documentation](https://bun.sh/docs)
 - [Bun HTML Server](https://bun.sh/docs/bundler/html) - Information about Bun's HTML server capabilities
+- [React Documentation](https://react.dev/learn) - Official React documentation
+- [React 19 Release Notes](https://react.dev/blog/2024/03/06/react-19) - Information about the latest React version
 - [Preact Signals](https://preactjs.com/guide/v10/signals)
 - [Svelte Documentation](https://svelte.dev/docs)
 
